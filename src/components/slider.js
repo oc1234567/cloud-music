@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SliderContainer } from './style';
-import "swiper/css/swiper.css"
+import "swiper/swiper-bundle.min.css";
 import Swiper from "swiper";
 
 function Slider(props) {
@@ -25,6 +25,7 @@ function Slider(props) {
 
     return (
         <SliderContainer>
+            <div className="before"></div>
             <div className="slider-container">
                 <div className="swiper-wrapper">
                     {
