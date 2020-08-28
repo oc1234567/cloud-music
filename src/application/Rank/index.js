@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Container, List, ListItem, SongList, EnterLoading } from './style';
 import { renderRoutes } from 'react-router-config'; 
 //util
-import { filterIndex, filterIdx } from '../../api/util'
+import { filterIndex } from '../../api/util'
 
 //公共组件
 import Scroll from '../../baseUI/scroll/index';
@@ -29,12 +29,8 @@ function Rank(props) {
         // eslint-disable-next-line 
     }, []);
 
-    const enterDetail = (name) => {
-        const idx = filterIdx(name);
-        if (idx === null) {
-            alert('暂无相关数据');
-            return;
-        }
+    const enterDetail = (detail) => {
+        props.history.push(`/rank/${detail.id}`)
     }
 
     const renderRankList = (list, global) => {
@@ -42,7 +38,7 @@ function Rank(props) {
             <List globalRank={global}>
                 {
                     list.map((item, index) => (
-                        <ListItem key={item.coverImgId+""+index} tracks={item.tracks} onClick={() => enterDetail(item.name)}>
+                        <ListItem key={item.coverImgId+""+index} tracks={item.tracks} onClick={() => enterDetail(item)}>
                             <div className="img_wrapper">
                                 <img src={item.coverImgUrl} alt="" />
                                 <div className="decorate"></div>

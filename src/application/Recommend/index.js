@@ -5,6 +5,9 @@ import Scroll from '../../baseUI/scroll';
 import { Content } from '../../components/style';
 import Loading from '../../baseUI/loading/index';
 
+//路由
+import { renderRoutes } from 'react-router-config';
+
 //redux
 import { connect } from 'react-redux';
 import * as actionTypes from './store/actionCreators';
@@ -37,6 +40,7 @@ function Recommend(props) {
                 </div>
             </Scroll>
             { enterLoading ? <Loading></Loading> : null }
+            { renderRoutes(props.route.routes) }
         </Content>
     )
 }

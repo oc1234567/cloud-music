@@ -26,6 +26,9 @@ import {
   changePullDownLoading,
 } from "./store/actionCreators";
 
+//路由
+import { renderRoutes } from 'react-router-config';
+
 //切换组件，组件重载，已有数据丢失，为了在重载时仍然读取到旧的数据，需将数据缓存
 import {
   DataContext,
@@ -93,13 +96,19 @@ function Singers(props) {
     pullDownRefreshDispatch(category, alpha);
   };
 
+  const enterDetail = (id) => {
+    props.history.push(`/singers/${id}`)
+  }
+
   const renderSingerList = () => {
     const list = singerList ? singerList.toJS() : [];
     return (
       <List>
         {list.map((item, index) => {
           return (
-            <ListItem key={item.accountId + "" + index}>
+            <ListItem key={item.accountId + "" + index} onClick={() => {
+              enterDetail(item.id);
+            }}>
               <div className="img_wrapper">
                 <LazyLoad
                   placeholder={
@@ -154,6 +163,7 @@ function Singers(props) {
         </Scroll>
         {enterLoading ? <Loading /> : null}
       </ListContainer>
+      { renderRoutes(props.route.routes) }
     </div>
   );
 }

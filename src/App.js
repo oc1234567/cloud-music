@@ -17,12 +17,12 @@ function App() {
   return (
     <Provider store={store}>
       <HashRouter>
-      <GlobalStyle></GlobalStyle>
-      <IconStyle></IconStyle>
-      <DataProvider>
-        { renderRoutes(routes) }
-      </DataProvider>
-    </HashRouter>
+        <GlobalStyle></GlobalStyle>
+        <IconStyle></IconStyle>
+        <DataProvider>
+          { renderRoutes(routes) }
+        </DataProvider>
+      </HashRouter>
     </Provider>
   )
 }

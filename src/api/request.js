@@ -19,3 +19,11 @@ export const getSingerListRequest= (category, alpha, count) => {
 export const getRankListRequest = () => {
     return axios.get('http://localhost:3000/toplist/detail').then(res => res.data);
 }
+
+export const getAlbumDetailRequest = (id) => {
+    return axios.get(`http://localhost:3000/playlist/detail?id=${id}`).then(res => res.data);
+}
+
+export const getSingerInfoRequest = (id) => {
+    return axios.get(`http://localhost:3000/artists?id=${id}`).then(res => res.data);
+}

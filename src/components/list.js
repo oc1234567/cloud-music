@@ -9,7 +9,15 @@ import { getCount } from '../api/util';
 //图片懒加载
 import LazyLoad from 'react-lazyload';
 
+//路由
+import { withRouter } from 'react-router-dom';
+
 function RecommendList(props) {
+
+    const enterDetail = (id) => {
+        props.history.push(`/recommend/${id}`);
+    }
+
     return (
         <ListWrapper>
             <h1 className="title">
@@ -18,7 +26,7 @@ function RecommendList(props) {
             <List>
                 {props.recommendList.map((item, index) => {
                     return (
-                        <ListItem key={item.id + index}>
+                        <ListItem key={item.id + index} onClick={() => enterDetail(item.id)}>
                             <div className="img_wrapper">
                                 <div className="decorate"></div>
                                 <LazyLoad placeholder={<img width="100%" height="100%" src={require("./music.png")} alt="music" />}>
@@ -38,4 +46,4 @@ function RecommendList(props) {
     );
 }
 
-export default React.memo(RecommendList);
+export default React.memo(withRouter(RecommendList));
