@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import * as actionTypes from './store/actionCreators';
 
 function Recommend(props) {
-    const { bannerList, recommendList, enterLoading } = props;
+    const { bannerList, recommendList, enterLoading, songsCount } = props;
     const { getBannerDataDispatch, getRecommendListDataDispatch } = props;
 
     useEffect(() => {
@@ -32,7 +32,7 @@ function Recommend(props) {
     const recommendListJS = recommendList ? recommendList.toJS() : [];
 
     return (
-        <Content>
+        <Content play={songsCount}>
             <Scroll className="list">
                 <div>
                     <Slider bannerList={bannerListJS}></Slider>
@@ -49,6 +49,7 @@ const mapStateToProps = (state) => ({
     bannerList: state.getIn(['recommend', 'bannerList']),
     recommendList: state.getIn(['recommend', 'recommendList']),
     enterLoading: state.getIn(['recommend', 'enterLoading']),
+    songsCount: state.getIn(['player', 'playList']).size,
 });
 
 const mapDispatchToProps = (dispatch) => {

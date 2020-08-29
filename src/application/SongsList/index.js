@@ -1,16 +1,26 @@
 import React, { forwardRef, memo } from "react";
-
 import { SongList, SongItem } from "./style";
 
+//redux
+import { connect } from 'react-redux';
 //util
 import { getCount, getName } from "../../api/util";
+
+//WARN: 应用之间有交互，应该解耦
+import { changePlayList, changeCurrentIndex, changeSequecePlayList } from './../../application/Player/store/actionCreators';
 
 const SongsList = forwardRef(function(props, refs) {
 
   const { collectCount, showCollect, songs, showBackground } = props;
+  const { changePlayListDispatch, changeCurrentIndexDispatch, changeSequecePlayListDispatch } = props;
+  const { musicAnimation } = props;
   const totalCount = songs.length;
 
   const handleClick = (e, index) => {
+    changePlayListDispatch(songs);
+    changeSequecePlayListDispatch(songs);
+    changeCurrentIndexDispatch(index);
+    musicAnimation(e.nativeEvent.clientX, e.nativeEvent.clientY);
   }
 
   const renderSongsList = (list) => {
@@ -55,4 +65,18 @@ const SongsList = forwardRef(function(props, refs) {
   );
 })
 
-export default memo(SongsList);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changePlayListDispatch (data){
+      dispatch (changePlayList (data));
+    },
+    changeCurrentIndexDispatch (data) {
+      dispatch (changeCurrentIndex (data));
+    },
+    changeSequecePlayListDispatch (data) {
+      dispatch (changeSequecePlayList (data))
+    }
+  }
+};
+
+export default connect(null, mapDispatchToProps)(memo(SongsList));

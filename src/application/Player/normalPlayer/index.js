@@ -1,5 +1,5 @@
 import React, { memo, useRef, useState } from "react";
-import { getName } from "../../../api/util";
+import { getName, formatPlayTime } from "../../../api/util";
 import {
   NormalPlayerContainer,
   Top,
@@ -24,13 +24,14 @@ import { playMode } from '../../../api/config';
 import { prefixStyle } from "../../../api/utils";
 
 function NormalPlayer(props) {
-  const { song, fullScreen, playing, mode } = props;
+  const { song, fullScreen, playing, mode, percent, duration, currentTime } = props;
   const {
     toggleFullScreen,
     clickPlaying,
     handlePrev,
     handleNext,
     changeMode,
+    onProgressChange
   } = props;
 
   const normalPlayerRef = useRef();
@@ -114,6 +115,13 @@ function NormalPlayer(props) {
     normalPlayerRef.current.style.display = "none";
   };
 
+  //进度条初始化
+  useEffect(() => {
+    const barWidth = progressBar.current.clientWidth - progressBtnWidth;
+    const offsetWidth = barWidth * percent ;
+    _offset(offsetWidth);
+  }, [percent]);
+
   const _offset = (offsetWidth) => {
     progress.current.style.width = `${offsetWidth}px`;
     progressBtn.current.style.transform = `translate3d (${offsetWidth}px, 0, 0)`;
@@ -155,9 +163,11 @@ function NormalPlayer(props) {
     percentChange(curPercent);
   };
 
-  const percentChange = (percent) => {};
+  const percentChange = (percent) => {
+    onProgressChange(percent);
+  };
 
-  const renderProgressBar = (props) => {
+  const renderProgressBar = () => {
     return (
       <ProgressBarWrapper>
         <div className="bar-inner" ref={progressBar} onClick={progressClick}>
@@ -228,11 +238,11 @@ function NormalPlayer(props) {
         </Middle>
         <Bottom className="bottom">
           <ProgressWrapper>
-            <span className="time time-l">0:00</span>
+            <span className="time time-l">{formatPlayTime(currentTime)}</span>
             <div className="progress-bar-wrapper">
-              {renderProgressBar({ percent: 0.2 })}
+              {renderProgressBar()}
             </div>
-            <div className="time time-r">4:17</div>
+            <div className="time time-r">{formatPlayTime(duration)}</div>
           </ProgressWrapper>
           <Operators>
             <div className="icon i-left" onClick={changeMode}>

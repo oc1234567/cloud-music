@@ -9,6 +9,7 @@ import {
 } from "./style";
 
 import SongsList from "../SongsList/index";
+import MusicNote from '../../baseUI/music-note/index';
 import { HEADER_HEIGHT } from "../../api/config";
 
 //公共组件
@@ -33,6 +34,7 @@ function Singer(props) {
   const header = useRef();
   const layer = useRef();
   const initialHeight = useRef(0);
+  const musicNoteRef = useRef();
 
   const OFFSET = 5;
 
@@ -118,9 +120,10 @@ function Singer(props) {
         <BgLayer ref={layer}></BgLayer>
         <SongListWrapper ref={songScrollWrapper}>
           <Scroll ref={songScroll} onScroll={handleScroll}>
-            <SongsList songs={songs} showCollect={false}></SongsList>
+            <SongsList songs={songs} showCollect={false} musicAnimation={musicAnimation}></SongsList>
           </Scroll>
         </SongListWrapper>
+        <MusicNote ref={musicNoteRef}></MusicNote>
       </Container>
       {enterLoading ? <Loading></Loading> : null}
     </CSSTransition>

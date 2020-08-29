@@ -1,5 +1,5 @@
 import React, { memo, useRef, useEffect, useState } from "react";
-import MiniPlay from "./miniPlayer/index";
+import MiniPlayer from "./MiniPlayer/index";
 import NormalPlayer from "./normalPlayer/index";
 
 //config
@@ -21,14 +21,6 @@ import {
 } from "./store/actionCreators";
 
 function Player(props) {
-  //   const currentSong = {
-  //     al: {
-  //       picUrl:
-  //         "https://p1.music.126.net/JL_id1CFwNJpzgrXwemh4Q==/109951164172892390.jpg",
-  //     },
-  //     name: "木偶人",
-  //     ar: [{ name: "薛之谦" }],
-  //   };
   const {
     fullScreen,
     playing,
@@ -41,7 +33,6 @@ function Player(props) {
   const {
     toggleFullScreenDispatch,
     togglePlayingDispatch,
-    togglePlayListDispatch,
     changeCurrentIndexDispatch,
     changeCurrentDispatch,
     changeModeDispatch,
@@ -59,30 +50,35 @@ function Player(props) {
   let percent = isNaN(currentTime / duration) ? 0 : currentTime / duration;
 
   const audioRef = useRef();
+  const songReady = useRef(true);
 
   const [preSong, setPreSong] = useState({});
 
-  useEffect(() => {
-    changeCurrentIndexDispatch(0);
-  }, []);
+  // useEffect(() => {
+  //   changeCurrentIndexDispatch(0);
+  // }, []);
 
   useEffect(() => {
     if (
       !!playList.length ||
       currentIndex === -1 ||
       !playList[currentIndex] ||
-      playList[currentIndex].id === preSong.id
+      playList[currentIndex].id === preSong.id ||
+      !songReady.current
     ) {
       return;
     }
     let current = playList[currentIndex];
     changeCurrentDispatch(current);
     setPreSong(current);
+    songReady.current = false;
     audioRef.current.src = getSongUrl(current.id);
     setTimeout(() => {
-      audioRef.current.play();
+      audioRef.current.play().then(() => {
+        songReady.current = true;
+      });
     });
-    togglePlayListDispatch(true);
+    togglePlayingDispatch(true);
     setCurrentTime(0);
     setDuration((current.dt / 1000) | 0);
   }, [playList, currentIndex]);
@@ -128,6 +124,19 @@ function Player(props) {
     changeCurrentIndexDispatch(index);
   };
 
+  const handleEnd = () => {
+    if (mode === playMode.loop) {
+      handleLoop();
+    }else {
+      handleNext();
+    }
+  }
+
+  const handleError = () => {
+    songReady.current = true;
+    alert("播放错误");
+  }
+
   const findIndex = (song, list) => {
     return list.findIndex((item) => {
       return song.id === item.id;
@@ -135,12 +144,7 @@ function Player(props) {
   };
 
   const changeMode = () => {
-    const newMode =
-      mode === playMode.random
-        ? playMode.loop
-        : mode === playMode.loop
-        ? playMode.sequence
-        : playMode.random;
+    const newMode = (mode + 1) % 3;
     if (newMode === 0) {
       //顺序模式
       changePlayListDispatch(sequencePlayList);
@@ -168,23 +172,31 @@ function Player(props) {
       }
   }
 
+  const updateTime = e => {
+    setCurrentTime(e.target.currentTime);
+  }
+
   return (
     <div>
-      {isEmptyObject ? null : (
-        <MiniPlay
+      {isEmptyObject(currentSong) ? null : (
+        <MiniPlayer
           song={currentSong}
           fullScreen={fullScreen}
           playing={playing}
           toggleFullScreen={toggleFullScreenDispatch}
           clickPlaying={clickPlaying}
-        ></MiniPlay>
+          percent={percent}
+        ></MiniPlayer>
       )}
-      {isEmptyObject ? null : (
+      {isEmptyObject(currentSong) ? null : (
         <NormalPlayer
           song={currentSong}
           fullScreen={fullScreen}
           playing={playing}
           mode={mode}
+          duration={duration}
+          currentTime={currentTime}
+          percent={percent}
           handlePrev={handlePrev}
           handleNext={handleNext}
           changeMode={changeMode}
@@ -193,7 +205,11 @@ function Player(props) {
           onProgressChange={onProgressChange}
         ></NormalPlayer>
       )}
-      <audio ref={audioRef}></audio>
+      <audio 
+      ref={audioRef} 
+      onTimeUpdate={updateTime} 
+      onEnded={handleEnd} 
+      onError={handleError}></audio>
     </div>
   );
 }
