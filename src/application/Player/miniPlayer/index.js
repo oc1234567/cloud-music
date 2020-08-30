@@ -1,4 +1,4 @@
-import React, { memo, useRef } from "react";
+import React, { memo, useRef, useCallback } from "react";
 import { getName } from "../../../api/util";
 import { MiniPlayerContainer, CircleWrapper } from "./style";
 
@@ -45,10 +45,15 @@ function ProgressCircle(props) {
 
 function MiniPlayer(props) {
   const { song, fullScreen, playing, percent } = props;
-  const { clickPlaying, toggleFullScreen } = props;
+  const { clickPlaying, toggleFullScreen, togglePlayList } = props;
 
   const miniPlayerRef = useRef();
 
+  const handleTogglePlayList = useCallback((e) => {
+    togglePlayList(true);
+    e.stopPropagation();
+  });
+  
   return (
     <CSSTransition
       in={!fullScreen}
@@ -80,7 +85,7 @@ function MiniPlayer(props) {
           <h2 className="name">{song.name}</h2>
           <p className="desc">{getName(song.ar)}</p>
         </div>
-        <div className="control">
+        <div className="control" onClick={handleTogglePlayList}>
           <ProgressCircle radius={32} percent={0.2}>
             {playing ? (
               <i className="icon-mini iconfont icon-pause" onClick={e => clickPlaying(e, false)}>&#xe613;</i>

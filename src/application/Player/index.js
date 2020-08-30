@@ -183,9 +183,10 @@ function Player(props) {
           song={currentSong}
           fullScreen={fullScreen}
           playing={playing}
+          percent={percent}
           toggleFullScreen={toggleFullScreenDispatch}
           clickPlaying={clickPlaying}
-          percent={percent}
+          togglePlayList={togglePlayListDispatch}
         ></MiniPlayer>
       )}
       {isEmptyObject(currentSong) ? null : (
@@ -203,6 +204,7 @@ function Player(props) {
           toggleFullScreen={toggleFullScreenDispatch}
           clickPlaying={clickPlaying}
           onProgressChange={onProgressChange}
+          togglePlayList={togglePlayListDispatch}
         ></NormalPlayer>
       )}
       <audio 

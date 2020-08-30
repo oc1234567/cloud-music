@@ -1,7 +1,11 @@
 import * as actionTypes from './constants';
 import { fromJS } from 'immutable';
 
+//config
 import { playMode } from '../../../api/config';
+
+//util
+import { findIndex } from '../../../api/util';
 
 const defaultState = fromJS({
     fullScreen: false,
@@ -30,8 +34,25 @@ export default (state = defaultState, action) => {
             return state.set('currentIndex', action.data);
         case actionTypes.SET_SHOW_PLAYLIST:
             return state.set('showPlayList', action.data);
+        case actionTypes.DELETE_SONG: 
+            return handleDeleteSong(state, action.data);
         default:
             return state;
     }
 }
 
+//删除歌曲
+const handleDeleteSong = (state, song) => {
+    const playList = JSON.parse(JSON.stringify(state.get("playList").toJS()));
+    const sequenctList = JSON.parse(JSON.stringify(state.get("sequencePlayList").toJS()));
+    let currentIndex = state.get('currentIndex');
+    const fpIndex = findIndex(song, playList);
+    playList.splice(fpIndex, 1);
+    if (fpIndex < currentIndex) currentIndex--;
+    const fsIndex = findIndex(song, sequenctList);
+    return state.merge({
+        'playList': fromJS(playList),
+        'sequencePlayList': fromJS(sequenctList),
+        'currentIndex': fromJS(currentIndex),
+    });
+}

@@ -31,7 +31,8 @@ function NormalPlayer(props) {
     handlePrev,
     handleNext,
     changeMode,
-    onProgressChange
+    onProgressChange,
+    togglePlayList
   } = props;
 
   const normalPlayerRef = useRef();
@@ -266,7 +267,7 @@ function NormalPlayer(props) {
             <div className="icon i-right" onClick={handleNext}>
               <i className="iconfont">&#xe8ab;</i>
             </div>
-            <div className="icon i-right">
+            <div className="icon i-right" onClick={() => togglePlayList(true)}>
               <i className="iconfont">&#xe696;</i>
             </div>
           </Operators>
