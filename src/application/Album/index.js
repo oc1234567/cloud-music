@@ -4,6 +4,7 @@ import { CSSTransition } from "react-transition-group";
 import style from '../../assets/global-style';
 
 import SongsList from '../SongsList/index';
+import MusicNote from '../../baseUI/music-note/index';
 
 //公共组件
 import Header from "../../baseUI/header/index";
@@ -26,6 +27,7 @@ function Album(props) {
   const [isMarquee, setIsMarquee] = useState(false);
 
   const headerEl = useRef();
+  const musicNoteRef = useRef();
 
   //读取props数据
   const { currentAlbum:currentAlbumImmutable, enterLoading } = props;
@@ -44,7 +46,8 @@ function Album(props) {
       if (!currentAlbum.length) {
         getAlbumDataDispatch(id);
       }
-  }, [getAlbumDataDispatch, id, currentAlbum]);
+      // eslint-disable-next-line
+  }, []);
 
   //监听滚动
   const handleScroll = useCallback((pos) => {
@@ -74,9 +77,9 @@ function Album(props) {
           <div className="decorate"></div>
           <img src={currentAlbum.coverImgUrl} alt="" />
           <div className="play_count">
-            <i className="iconfont play">&#xe885;</i>
+            <i className="iconfont play">&#xe707;</i>
             <span className="count">
-              {Math.floor(currentAlbum.subscribedCount / 1000) / 10} 万{" "}
+            {" "}{Math.floor(currentAlbum.subscribedCount / 1000) / 10} 万{" "}
             </span>
           </div>
         </div>
@@ -116,7 +119,9 @@ function Album(props) {
       );
   }
 
-  
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y });
+  }
 
   return (
     <CSSTransition
@@ -134,10 +139,11 @@ function Album(props) {
           <div>
             { renderTopDesc() }
             { renderMenu() }
-            <SongsList collectCount={currentAlbum.subscribedCount} showCollect={true} songs={currentAlbum.tracks} showBackground={true}></SongsList>
+            <SongsList collectCount={currentAlbum.subscribedCount} showCollect={true} songs={currentAlbum.tracks} showBackground={true} musicAnimation={musicAnimation}></SongsList>
           </div>
         </Scroll> : null}
         { enterLoading ? <Loading></Loading> : null}
+        <MusicNote ref={musicNoteRef}></MusicNote>
       </Container>
     </CSSTransition>
   );

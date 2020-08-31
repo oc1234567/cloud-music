@@ -15,7 +15,7 @@ export const changeEnterLoading = (data) => ({
 export const getAlbumList = (id) => {
     return (dispatch) => {
         getAlbumDetailRequest(id).then(data => {
-            dispatch(changeCurrentAlbum(data.list));
+            dispatch(changeCurrentAlbum(data.playlist));
             dispatch(changeEnterLoading(false));
         }).catch(() => {
             console.log("歌单详情数据传输错误");

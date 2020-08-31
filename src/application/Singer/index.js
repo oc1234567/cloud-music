@@ -48,7 +48,8 @@ function Singer(props) {
   useEffect(() => {
     changeEnterLoading(true);
     getSingerInfoDispatch(id);
-  }, [getSingerInfoDispatch, id]);
+    // eslint-disable-next-line
+  }, [id]);
 
   //初始化UI
   useEffect(() => {
@@ -94,6 +95,10 @@ function Singer(props) {
       imageDOM.style.zIndex = 99;
     }
   }, []);
+
+  const musicAnimation = (x, y) => {
+    musicNoteRef.current.startAnimation({ x, y });
+  }
 
   return (
     <CSSTransition

@@ -81,6 +81,7 @@ function Player(props) {
     togglePlayingDispatch(true);
     setCurrentTime(0);
     setDuration((current.dt / 1000) | 0);
+    // eslint-disable-next-line
   }, [playList, currentIndex]);
 
   useEffect(() => {
