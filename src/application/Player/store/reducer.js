@@ -28,6 +28,8 @@ export default (state = defaultState, action) => {
             return state.set('playing', action.data);
         case actionTypes.SET_SEQUENCE_PLAYLIST:
             return state.set('sequencePlayList', action.data);
+        case actionTypes.SET_PLAYLIST:
+            return state.set('playList', action.data);
         case actionTypes.SET_PLAY_MODE:
             return state.set('mode', action.data);
         case actionTypes.SET_CURRENT_INDEX:
@@ -50,6 +52,7 @@ const handleDeleteSong = (state, song) => {
     playList.splice(fpIndex, 1);
     if (fpIndex < currentIndex) currentIndex--;
     const fsIndex = findIndex(song, sequenctList);
+    sequenctList.splice(fsIndex, 1);
     return state.merge({
         'playList': fromJS(playList),
         'sequencePlayList': fromJS(sequenctList),

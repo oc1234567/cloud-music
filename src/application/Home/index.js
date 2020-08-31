@@ -8,6 +8,8 @@ import {
     TabItem
 } from './style';
 
+import Player from '../Player/index';
+
 
 function Home(props) {
     const { route } = props;
@@ -30,6 +32,7 @@ function Home(props) {
                 </NavLink>
             </Tab>
             { renderRoutes(route.routes) }
+            <Player></Player>
         </div>
     )
 }

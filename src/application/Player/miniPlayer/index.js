@@ -44,7 +44,7 @@ function ProgressCircle(props) {
 }
 
 function MiniPlayer(props) {
-  const { song, fullScreen, playing, percent } = props;
+  const { song, fullScreen, playing } = props;
   const { clickPlaying, toggleFullScreen, togglePlayList } = props;
 
   const miniPlayerRef = useRef();
@@ -52,7 +52,8 @@ function MiniPlayer(props) {
   const handleTogglePlayList = useCallback((e) => {
     togglePlayList(true);
     e.stopPropagation();
-  });
+    // eslint-disable-next-line
+  }, []);
   
   return (
     <CSSTransition

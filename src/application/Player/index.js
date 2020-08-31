@@ -1,5 +1,5 @@
 import React, { memo, useRef, useEffect, useState } from "react";
-import MiniPlayer from "./MiniPlayer/index";
+import MiniPlayer from "./miniPlayer/index";
 import NormalPlayer from "./normalPlayer/index";
 
 //config
@@ -33,6 +33,7 @@ function Player(props) {
   const {
     toggleFullScreenDispatch,
     togglePlayingDispatch,
+    togglePlayListDispatch,
     changeCurrentIndexDispatch,
     changeCurrentDispatch,
     changeModeDispatch,
@@ -60,7 +61,7 @@ function Player(props) {
 
   useEffect(() => {
     if (
-      !!playList.length ||
+      !playList.length ||
       currentIndex === -1 ||
       !playList[currentIndex] ||
       playList[currentIndex].id === preSong.id ||

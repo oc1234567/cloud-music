@@ -1,4 +1,4 @@
-import React, { memo, useRef, useState } from "react";
+import React, { memo, useRef, useEffect } from "react";
 import { getName, formatPlayTime } from "../../../api/util";
 import {
   NormalPlayerContainer,
@@ -21,10 +21,12 @@ import animations from "create-keyframe-animation";
 import { playMode } from '../../../api/config';
 
 //util
-import { prefixStyle } from "../../../api/utils";
+import { prefixStyle } from "../../../api/util";
 
 function NormalPlayer(props) {
+  console.log('全屏播放器加载');
   const { song, fullScreen, playing, mode, percent, duration, currentTime } = props;
+  console.log(song, fullScreen, playing, mode, percent, duration, currentTime)
   const {
     toggleFullScreen,
     clickPlaying,
@@ -47,7 +49,7 @@ function NormalPlayer(props) {
   const progressBtnWidth = 16;
   const transform = prefixStyle("transform");
 
-  // 启用帧动画
+  //启用帧动画
   const enter = () => {
     normalPlayerRef.current.style.display = "block";
     const { x, y, scale } = _getPosAndScale(); // 获取 miniPlayer 图片中心相对 normalPlayer 唱片中心的偏移
@@ -116,7 +118,7 @@ function NormalPlayer(props) {
     normalPlayerRef.current.style.display = "none";
   };
 
-  //进度条初始化
+  进度条初始化
   useEffect(() => {
     const barWidth = progressBar.current.clientWidth - progressBtnWidth;
     const offsetWidth = barWidth * percent ;
@@ -278,7 +280,6 @@ function NormalPlayer(props) {
 }
 
 NormalPlayer.prototype = {
-  song: PropTypes.array,
   fullScreen: PropTypes.bool,
   toggleFullScreenDispatch: PropTypes.func,
 };

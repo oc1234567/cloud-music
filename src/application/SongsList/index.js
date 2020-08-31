@@ -67,14 +67,14 @@ const SongsList = forwardRef(function(props, refs) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    changePlayListDispatch (data){
-      dispatch (changePlayList (data));
+    changePlayListDispatch(data){
+      dispatch(changePlayList(data));
     },
-    changeCurrentIndexDispatch (data) {
-      dispatch (changeCurrentIndex (data));
+    changeCurrentIndexDispatch(data) {
+      dispatch(changeCurrentIndex(data));
     },
-    changeSequecePlayListDispatch (data) {
-      dispatch (changeSequecePlayList (data))
+    changeSequecePlayListDispatch(data) {
+      dispatch(changeSequecePlayList(data))
     }
   }
 };

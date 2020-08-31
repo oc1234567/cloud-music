@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback, memo } from "react";
 import { Container, TopDesc, Menu } from "./style";
 import { CSSTransition } from "react-transition-group";
 import style from '../../assets/global-style';
@@ -30,7 +30,7 @@ function Album(props) {
   const musicNoteRef = useRef();
 
   //读取props数据
-  const { currentAlbum:currentAlbumImmutable, enterLoading } = props;
+  const { currentAlbum:currentAlbumImmutable, enterLoading, songsCount } = props;
   const { getAlbumDataDispatch } = props;
 
   // 从路由中拿到歌单的 id
@@ -132,7 +132,7 @@ function Album(props) {
       unmountOnExit
       onExit={props.history.goBack}
     >
-      <Container>
+      <Container play={songsCount}>
         <Header ref={headerEl} title={title} handleClick={handleBack} isMarquee={isMarquee}></Header>
         {!isEmptyObject(currentAlbum) ?
         <Scroll bounceTop={false} onScroll={handleScroll}>
@@ -151,7 +151,8 @@ function Album(props) {
 
 const mapStateToProps = (state) =>({
     currentAlbum: state.getIn(['album', 'currentAlbum']),
-    enterLoading: state.getIn(['album', 'enterLoading'])
+    enterLoading: state.getIn(['album', 'enterLoading']),
+    songsCount: state.getIn(['player', 'playList']).size,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -161,4 +162,4 @@ const mapDispatchToProps = (dispatch) => ({
     }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Album));
+export default connect(mapStateToProps, mapDispatchToProps)(memo(Album));

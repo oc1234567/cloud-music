@@ -23,7 +23,7 @@ import { getSingerInfo, changeEnterLoading } from "./store/actionCreators";
 
 function Singer(props) {
   //从props读取数据
-  const { artist: artistImmu, songsOfArtist: songsImmu, enterLoading } = props;
+  let { artist: artistImmu, songsOfArtist: songsImmu, enterLoading } = props;
   const { getSingerInfoDispatch } = props;
 
   const [showState, setShowState] = useState;
