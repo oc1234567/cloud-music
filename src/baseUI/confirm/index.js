@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import styled, {keyframes} from 'styled-components';
 import style from '../../assets/global-style';
@@ -63,8 +63,44 @@ const ConfirmWrapper = styled.div`
                 .operate_btn {
                     flex: 1;
                     line-height: 22px;
+                    padding: 10px 0;
+                    border-top: 1px solid ${style["border-color"]};
+                    color: ${style["font-color-desc"]};
+                    &.left{
+                        border-right: 1px solid ${style["border-color"]};
+                    }
                 }
-            };
+            }
         }
     }
-`
+`;
+
+const Confirm = forwardRef((props, ref) => {
+    const [show, setShow] = useState(false);
+    const { text, cancelBtnText, confirmBtnText } = props;
+    const { handleConfirm } = props;
+
+    useImperativeHandle(ref, () => ({
+        show() {
+            setShow(true);
+        }
+    }));
+    return (
+        <CSSTransition className="confirm-fade" timeout={300} appear={true} in={show}>
+            <ConfirmWrapper style={{display: show ? "block" : "none"}} onClick={e => e.stopPropagation()}>
+                <div>
+                    <div className="confirm_content">
+                        <p className="text"> { text } </p>
+                        <div className="operate">
+                            <div className="operate_btn left" onClick={() => setShow(false)}> {cancelBtnText} </div>
+                            <div className="operate_btn" onClick={() => { setShow(false); handleConfirm(); }}> {confirmBtnText} </div>
+                        </div>
+                    </div>
+                </div>
+            </ConfirmWrapper>
+        </CSSTransition>
+    )
+})
+
+
+export default React.memo(Confirm);

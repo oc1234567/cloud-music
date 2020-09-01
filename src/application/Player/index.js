@@ -10,6 +10,9 @@ import { getSongUrl, isEmptyObject, shuffle } from "../../api/util";
 
 //redux
 import { connect } from "react-redux";
+
+//api
+import { getLyricRequest } from '../../api/request'; 
 import {
   changeCurrentIndex,
   changeCurrentSong,
@@ -52,6 +55,7 @@ function Player(props) {
 
   const audioRef = useRef();
   const songReady = useRef(true);
+  const currentLyric = useRef();
 
   const [preSong, setPreSong] = useState({});
 
@@ -59,6 +63,27 @@ function Player(props) {
   //   changeCurrentIndexDispatch(0);
   // }, []);
 
+  useEffect(() => {
+    console.warn(`补充 歌词插件`);
+    getLyric(currentSong.id);
+    setCurrentTime(0);
+    setDuration((currentSong.dt/1000) | 0);
+}, [currentIndex, playList]);
+
+const getLyric = id => {
+    let lyric = "";
+    getLyricRequest(id).then(data => {
+        console.log(data);
+        lyric = data.lrc.lyric;
+        if (!lyric) {
+            currentLyric.current = null;
+            return;
+        }
+    }).catch(() => {
+        songReady.current = true;
+        audioRef.current.play();
+    })
+}
   useEffect(() => {
     if (
       !playList.length ||
@@ -84,6 +109,8 @@ function Player(props) {
     setDuration((current.dt / 1000) | 0);
     // eslint-disable-next-line
   }, [playList, currentIndex]);
+
+  
 
   useEffect(() => {
     playing ? audioRef.current.play() : audioRef.current.pause();
